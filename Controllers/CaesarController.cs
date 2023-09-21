@@ -4,7 +4,7 @@ using ShiftAPI.Services.CaesarCode;
 namespace ShiftAPI.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     public class CaesarController : Controller
     {
         private readonly IEncoder caesarEncoder;
@@ -16,17 +16,24 @@ namespace ShiftAPI.Controllers
 
         [HttpGet]
         public IActionResult Index()
-        {
-            string s = "shit";
+        {   
+            return Ok();
+        }
 
-            var a = new CaesarDTO()
-            {
-                Key = 3,
-                AlphabetKey = "English",
-                Input = s
-            };
-            
-            return Ok(caesarEncoder.Encode(a));
+        [HttpPost]
+        public IActionResult Encode(CaesarDTO data)
+        {
+            var output = caesarEncoder.Encode(data);
+
+            return Ok(output);
+        }
+
+        [HttpPost]
+        public IActionResult Decode(CaesarDTO data)
+        {
+            var output = caesarEncoder.Decode(data);
+
+            return Ok(output);
         }
 
     }

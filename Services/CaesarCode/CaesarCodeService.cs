@@ -55,7 +55,7 @@ namespace ShiftAPI.Services.CaesarCode
             int rawIndex = alphabet.IndexOf(shiftedChar) + key;
 
 
-            if (rawIndex > alphabet.Length)
+            if (rawIndex >= alphabet.Length)
             {
                 return rawIndex - alphabet.Length;
             }
