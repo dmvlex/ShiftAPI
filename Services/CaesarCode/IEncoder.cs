@@ -2,7 +2,7 @@
 {
     public interface IEncoder
     {
-        public string Decode(string input, string alphabetKey);
-        public string Encode(string input, string alphabetKey)
+        public string Decode(CaesarDTO data);
+        public string Encode(CaesarDTO data);
     }
 }

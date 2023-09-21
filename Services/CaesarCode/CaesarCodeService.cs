@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using Microsoft.Extensions.Options;
+using System.Text;
 
 namespace ShiftAPI.Services.CaesarCode
 {
@@ -8,38 +9,34 @@ namespace ShiftAPI.Services.CaesarCode
         /// Набор доступных алфавитов
         /// </summary>
         public Dictionary<string, string> Alphabet { get => alphabets; }
-        /// <summary>
-        /// Ключ шифра - число сдвига (стандартный - 1)
-        /// </summary>
-        public int Key { get; set; } = 1;
 
         private Dictionary<string, string> alphabets;
 
         /// <summary>
         /// Дешифрует сообщение
         /// </summary>
-        public string Decode(string input, string alphabetKey)
+        public string Decode(CaesarDTO data)
         {
-            Key *= -1;
-            string decodedString = Encode(input, alphabetKey);
-            Key *= -1;
+            data.Key *= -1;
+            string decodedString = Encode(data);
+            data.Key *= -1;
             return decodedString;
         }
 
         /// <summary>
         /// Шифрует сообщение
         /// </summary>
-        public string Encode(string input, string alphabetKey)
+        public string Encode(CaesarDTO data)
         {
             StringBuilder output = new StringBuilder();
 
-            string currentAlphabet = Alphabet[alphabetKey];
+            string currentAlphabet = Alphabet[data.AlphabetKey];
 
-            foreach (char character in input)
+            foreach (char character in data.Input)
             {
                 if (currentAlphabet.Contains(character))
                 {
-                    output.Append(currentAlphabet[NewIndex(currentAlphabet, character)]);
+                    output.Append(currentAlphabet[NewIndex(currentAlphabet, character,data.Key)]);
                 }
                 else
                 {
@@ -53,9 +50,9 @@ namespace ShiftAPI.Services.CaesarCode
         /// <summary>
         /// Возвращает новый индекс сдвинутого символа
         /// </summary>
-        private int NewIndex(string alphabet, char shiftedChar)
+        private int NewIndex(string alphabet, char shiftedChar, int key)
         {
-            int rawIndex = alphabet.IndexOf(shiftedChar) + Key;
+            int rawIndex = alphabet.IndexOf(shiftedChar) + key;
 
 
             if (rawIndex > alphabet.Length)
@@ -79,6 +76,7 @@ namespace ShiftAPI.Services.CaesarCode
 
         public CaesarCodeService(CaesarOptions options)
         {
+            alphabets = options.Alphabets;
         }
 
     }
