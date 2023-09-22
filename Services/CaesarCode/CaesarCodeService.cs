@@ -57,7 +57,14 @@ namespace ShiftAPI.Services.CaesarCode
 
             if (rawIndex >= alphabet.Length)
             {
-                return rawIndex - alphabet.Length;
+                var circle = rawIndex - alphabet.Length;
+                
+                while(circle >= alphabet.Length)
+                {
+                    circle -= alphabet.Length;
+                }
+
+                return circle;
             }
             else if (rawIndex < 0)
             {
